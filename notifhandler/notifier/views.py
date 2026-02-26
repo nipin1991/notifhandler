@@ -587,24 +587,23 @@ def agent_event(request):
             elevator_info = ElevatorInfo.objects.get(ip_add=ip, elevator_id=agent_id)
             current_floor = elevator_info.floor_id
             logger.info("IP: {0}, elevator id: {1}, current floor: {2}".format(ip, agent_id, current_floor))
-
-            if int(current_floor) == int(response['value']):
-                logger.info("IP: {0}, current floor: {1} is same as GOTO floor: {2}. Not sending REACHEDFLOOR.".format(
-                    ip, int(current_floor), int(response['value'])))
-                return JsonResponse(response, status=200, safe=False)
-            elevator_info.floor_id = int(floor_id)
-
         except ElevatorInfo.DoesNotExist:
             logger.info("IP: {0}, ElevatorInfo does not exist".format(ip))
-            elevator_info = ElevatorInfo(ip_add=ip, elevator_id=agent_id, floor_id=floor_id)
+            # Elevator starts from base floor until travel completes.
+            elevator_info = ElevatorInfo(ip_add=ip, elevator_id=agent_id, floor_id=0)
+            elevator_info.save()
+            current_floor = elevator_info.floor_id
+            logger.info("Initialized ElevatorInfo, IP: {0}, elevator_id: {1}, floor_id: {2}".format(
+                ip, agent_id, current_floor))
 
-        elevator_info.save()
-        logger.info("Successfully saved ElevatorInfo, IP: {0}, elevator_id: {1}, floor_id: {2}".format(
-            ip, agent_id, floor_id))
+        if int(current_floor) == int(response['value']):
+            logger.info("IP: {0}, current floor: {1} is same as GOTO floor: {2}. Not sending REACHEDFLOOR.".format(
+                ip, int(current_floor), int(response['value'])))
+            return JsonResponse(response, status=200, safe=False)
 
         # send REACHEDFLOOR
-        #time.sleep(68)
-        #logger.info("slept for 68 sec , IP: {0}, elevator_id: {1}, floor_id: {2}".format(ip, agent_id, floor_id))
+        logger.info("Scheduling REACHEDFLOOR after 70 sec, IP: {0}, elevator_id: {1}, target floor_id: {2}".format(
+            ip, agent_id, floor_id))
         api_uri = 'http://{0}:8181/api/notify_agent'.format(ip)
 
         # some ad-hoc changes done for Saurabh's setup, to simulate errors for some calls
@@ -613,15 +612,16 @@ def agent_event(request):
             if request_count % 50 == 0:
                 res_json['value'] = 0
                 logger.info("Request Count:{0} is divisible by 50, Hence sending Floor ID as 0".format(request_count))
-                send_event.delay(api_uri, res_json)
+                send_event.delay(api_uri, res_json, ip, agent_id, floor_id, True)
             elif request_count % 50 == 25:
                 logger.info("Request Count:{0} is divisible by 25, Hence sending Nothing".format(request_count))
-                pass
+                send_event.delay(api_uri, res_json, ip, agent_id, floor_id, False)
             else:
                 logger.info("Request Count:{0} is normal case, Hence sending the correct REACHEDFLOOR".format(request_count))
                 api_uri = 'http://{0}:8181/api/notify_agent'.format(ip)
-
-        send_event.delay(api_uri, res_json)
+                send_event.delay(api_uri, res_json, ip, agent_id, floor_id, True)
+        else:
+            send_event.delay(api_uri, res_json, ip, agent_id, floor_id, True)
 
     connection.close()  # this prevents from leaving open DB connections from django
     return JsonResponse(response, status=200, safe=False)
