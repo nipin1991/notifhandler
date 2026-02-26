@@ -1,0 +1,17 @@
+
+import os
+import sys
+from celery import Celery
+
+# set the default Django settings module for the 'celery' program.
+
+os.environ['ROBO_HOME'] = '/home/gor/robocop'
+sys.path.append('/home/gor/robocop')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'notifhandler.settings')
+
+app = Celery('notifhandler')
+
+# Using a string here means the worker will not have to
+# pickle the object when using Windows.
+app.config_from_object('django.conf:settings')
+app.autodiscover_tasks()

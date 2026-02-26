@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="main_content">
+    <table style="margin:1em auto;">
+        <form id="inv_form" action="/view_inventory" method="get">
+            <tr>
+                <td><label for="butler"><b><big>Butler IP:&nbsp;&nbsp;</big></b></label></td>
+                <td><input class="form-control" type="text" name="butler" id="butler" placeholder="Butler IP" size="30"></td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+
+                <td><label for="platform"><b><big>Platform IP:&nbsp;&nbsp;</big></b></label></td>
+                <td><input class="form-control" type="text" name="platform" id="platform" placeholder="Platform IP" size="30"></td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                <td><input type="submit" class="btn btn-default" id="invsubmitbtn"></td>
+            </tr>
+        </form>
+    </table>
+
+    <div style="text-align: center; padding-bottom: 20px;">
+        Data generated using Butler API : /api/inventory/v2/all?details=true<br>
+        Note: Data shown does not include pick_reserved and audit_blocked quantity<br><br>
+        <b>Total number of items available in inventory : {{ inv_count }}</b>
+    </div>
+
+    <table id="invtable" class="table table-striped">
+        <thead>
+            <tr>
+                <th align="left">Product UID</th>
+                <th align="left">Product SKU</th>
+                <th align="left">Quantity</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for uid, sku_qty in data.items %}
+            <tr>
+                <td>{{ uid }}</td>
+                <td>{{ sku_qty.0 }}</td>
+                <td>{{ sku_qty.1 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#invtable').DataTable({
+            "order": [[ 2, "desc" ]]
+        });
+    });
+</script>
+{% endblock content %}

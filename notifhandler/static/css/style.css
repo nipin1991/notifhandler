@@ -1,0 +1,127 @@
+@font-face {
+  font-family: 'rob-med';
+  src: url('../fonts/Roboto-Medium.ttf');
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  /*font-family: 'rob-med' !important;*/
+  background-color: #F5F5F5 !important;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 75px;
+  line-height: 75px;
+  box-shadow: 0 0 4px rgba(0,0,0,.14), 0 4px 8px rgba(0,0,0,.28);
+  z-index: 10001;
+  overflow: hidden;
+  background-color: #ffffff;
+  color: #444;
+  font-size: 16px;
+}
+
+.logo {
+  color: #999999;
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.logo:hover {
+    color: #EAECEE;
+}
+
+section.hero {
+  background-color: #474747;
+  box-sizing: border-box;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  height: 150px;
+  min-height: 150px;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 15px;
+  position: relative;
+  text-align: left;
+  margin-top: 75px;
+  -ms-flex-align: center;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+.main {
+  margin: 40px auto auto 20px;
+  overflow: auto;
+}
+
+.mainforboot {
+  margin: 20px auto auto 20px;
+  overflow: auto;
+}
+
+#container_runrobo {
+  width: 70%;
+  margin-left: 1%;
+  background-color: lightgray;
+  border: 1px solid black;
+}
+
+#runrobo_left {
+  float: left;
+  margin-left: 10px;
+}
+
+#runrobo_center {
+  margin: 0 auto;
+  width: 30%;
+}
+
+.heading {
+  padding: 5px 0 10px 0;
+}
+
+#runrobo_right {
+  float: right;
+  width: 40%;
+  padding: 5px;
+}
+
+.clearfix {
+  clear: both;
+  font-size: 1px;
+}
+
+table.config_table {
+  margin-top: 5px;
+}
+
+table.config_table th {
+  text-align: left;
+  padding: 5px;
+  vertical-align: initial;
+}
+
+table.config_table td {
+  vertical-align: middle;
+}
+
+/* NSR Order wave page */
+
+#nsr_container {
+  padding: 10px;
+  width: 50%;
+  margin-left: 10px;
+  border: 1px solid black;
+}

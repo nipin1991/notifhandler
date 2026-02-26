@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="main_content">
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="delete_model" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Delete URL</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning">Delete</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table id="urltable" cellpadding="0" class="urltable">
+        <thead>
+            <tr class="spaceUnder">
+                <th align="left">ID</th>
+                <th align="left">URL Pattern</th>
+                <th align="left">Response</th>
+                <th align="left">Created By</th>
+                <th align="left">Created On</th>
+                <th align="left">Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in data %}
+            <tr>
+                <td>{{ record.id }}</td>
+                <td>{{ record.url_pattern }}</td>
+                <td>{{ record.response }}</td>
+                <td>{{ record.created_by }}</td>
+                <td>{{ record.created_on }}</td>
+                <td><button type="button" class="btn btn-warning" name="delete_url_btn" data-toggle="modal" data-target="#delete_model">Delete</button></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#urltable').DataTable( {
+            "order": [[ 0, "desc" ]]
+        });
+    });
+</script>
+
+{% endblock content %}

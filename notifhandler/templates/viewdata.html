@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id="main_content">
+    <table id="notiftable" cellpadding="0" class="notiftable">
+        <thead>
+            <tr class="spaceUnder">
+                <th align="left">ID</th>
+                <th align="left">Datetime</th>
+                <th align="left">Notif Type</th>
+                <th align="left">Custom Headers</th>
+                <th align="left">Payload</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in data %}
+            <tr>
+                <td>{{ record.auto_increment_id }}</td>
+                <td>{{ record.created_on }}</td>
+                <td><pre>{{ record.notif_type }}</pre></td>
+                <td><pre>{{ record.headers }}</pre></td>
+                <td><pre>{{ record.data }}</pre></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#notiftable').DataTable( {
+            "order": [[ 0, "desc" ]],
+            "columnDefs": [
+            {
+                "targets": [ 0 ],
+                "visible": false,
+                "searchable": false
+            }
+        ]
+        });
+    });
+</script>
+
+{% endblock content %}

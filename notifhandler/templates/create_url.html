@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<script>
+    {% if msg %}
+    alert('{{ msg }}');
+    {% endif %}
+</script>
+
+<div id="main_content">
+    <div class="container">
+        <br><br>
+        <h2>Create URL Endpoint</h2>
+        <form method="get">
+            <p><label for="endpoint">Endpoint:</label> <input type="text" name="endpoint" autofocus required id="endpoint" /></p>
+            <p><label for="response">Response:</label> <textarea name="response" id="response" rows="6"></textarea></p>
+            <br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
